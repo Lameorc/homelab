@@ -9,7 +9,6 @@ __     __    _ _        _       _                          _       _
 
 Welcome to my homelab machine managed by ansible
 I have {{ ansible_processor_vcpus }} CPUs and {{ (ansible_memtotal_mb / 1000) | round(1) }}Gb RAM available
-My distribution is {{ ansible_os_family }} and I go also go by {{ ansible_fqdn }}
-
+My distribution is {{ ansible_os_family }} on {{ ansible_architecture}} and I go go by {{ ansible_fqdn }}
 
 Unauthorized access is strictly prohibited!

@@ -8,6 +8,7 @@ all:
             raspberry-tv:
               ansible_host: 100.90.178.12
               ansible_user: pi
+        # possibly non-sensical to manage workstations through this as well
         workstations:
           children:
             linux_workstations:

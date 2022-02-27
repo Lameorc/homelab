@@ -1,0 +1,5 @@
+---
+- hosts: all:!workstations
+  roles:
+    - common
+    - tailscale

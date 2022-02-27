@@ -5,3 +5,8 @@
 - Proper sshd config management automation
   - Only allow ssh key auth
   - Disable root login
+- Roles for
+  - smb storage/NAS
+  - plex
+  - Seedbox/torrent client
+  - Gitea

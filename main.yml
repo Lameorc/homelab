@@ -1,5 +1,8 @@
 ---
-- hosts: all:!workstations
-  tasks:
-    - name: Include MOTD tasks
-      include_tasks: ./tasks/motd.yml
+- import_playbook: playbooks/ensure_common.yml
+
+# Install plex servers
+- hosts: raspberry-tv
+  roles:
+    - plex
+
