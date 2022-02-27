@@ -7,6 +7,5 @@
   - Disable root login
 - Roles for
   - smb storage/NAS
-  - plex
   - Seedbox/torrent client
   - Gitea

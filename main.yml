@@ -2,7 +2,4 @@
 - import_playbook: playbooks/ensure_common.yml
 
 # Install plex servers
-- hosts: raspberry-tv
-  roles:
-    - plex
-
+- import_playbook: playbooks/plex.yml

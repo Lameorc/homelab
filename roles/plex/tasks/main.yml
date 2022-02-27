@@ -1,18 +1,20 @@
 ---
 - name: Add Plex apt key (Ubuntu & Debian with systemd)
+  become: True
   apt_key:
     url: https://downloads.plex.tv/plex-keys/PlexSign.key
     state: present
 
 - name: Add Plex apt repo (Ubuntu & Debian with systemd)
+  become: True
   apt_repository:
     repo: deb https://downloads.plex.tv/repo/deb public main
     state: present
-  changed_when: false
+    filename: plexmediaserver
 
 - name: Apt install Plex
+  become: True
   apt:
     name: plexmediaserver
     state: present
     update_cache: true
-  notify: restart plex
