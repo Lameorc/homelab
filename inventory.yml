@@ -1,0 +1,20 @@
+---
+all:
+  children:
+    tailscale:
+      children:
+        raspberry:
+          hosts:
+            raspberry-tv:
+              ansible_host: 100.90.178.12
+              ansible_user: pi
+        workstations:
+          children:
+            linux_workstations:
+              hosts:
+                sbb:
+                  ansible_host: 100.127.145.62
+                  ansible_user: newmark
+
+    brno_drevarska_lan:
+      children:

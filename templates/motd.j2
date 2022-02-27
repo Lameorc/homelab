@@ -1,0 +1,15 @@
+{% raw %}
+__     __    _ _        _       _                          _       _
+\ \   / /__ (_) |_ __ _( )___  | |__   ___  _ __ ___   ___| | __ _| |__
+ \ \ / / _ \| | __/ _` |// __| | '_ \ / _ \| '_ ` _ \ / _ \ |/ _` | '_ \
+  \ V / (_) | | || (_| | \__ \ | | | | (_) | | | | | |  __/ | (_| | |_) |
+   \_/ \___// |\__\__,_| |___/ |_| |_|\___/|_| |_| |_|\___|_|\__,_|_.__/
+          |__/
+{% endraw %}
+
+Welcome to my homelab machine managed by ansible
+I have {{ ansible_processor_vcpus }} CPUs and {{ (ansible_memtotal_mb / 1000) | round(1) }}Gb RAM available
+My distribution is {{ ansible_os_family }} and I go also go by {{ ansible_fqdn }}
+
+
+Unauthorized access is strictly prohibited! But not like I can stop you once you get here :)

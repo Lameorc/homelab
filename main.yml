@@ -1,0 +1,5 @@
+---
+- hosts: all:!workstations
+  tasks:
+    - name: Include MOTD tasks
+      include_tasks: ./tasks/motd.yml

@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-playbook.json": "file:///home/newmark/code/vpodhajsky/homelab/main.yml",
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json": "file:///home/newmark/code/vpodhajsky/homelab/tasks/motd.yml"
+    }
+}

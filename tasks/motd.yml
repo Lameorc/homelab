@@ -1,0 +1,6 @@
+---
+- name: "Set up MOTD"
+  become: true
+  ansible.builtin.template:
+    src: ./templates/motd.j2
+    dest: /etc/motd
