@@ -4,7 +4,7 @@
   block:
   - name: "Add signing key"
     ansible.builtin.apt_key:
-      # url this is for raspbian, make generic
+      # url this is for raspbian, TODO: make generic
       url: "https://pkgs.tailscale.com/stable/raspbian/buster.gpg"
       state: present
   - name: "Ensure apt repo"
