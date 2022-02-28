@@ -8,6 +8,12 @@ all:
             raspberry-tv:
               ansible_host: 100.90.178.12
               ansible_user: pi
+              samba_mounts:
+                # first "legacy" storage, get rid of it eventually
+                rpistorage: "/media/usb1"
+                elements_media: "/media/elementsMedia"
+                elements_storage: "/media/elementsStorage"
+
         # possibly non-sensical to manage workstations through this as well
         workstations:
           children:

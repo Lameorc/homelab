@@ -1,0 +1,33 @@
+---
+- name: Ensure samba mounts are defined as list
+  ansible.builtin.assert:
+    that:
+      - samba_mounts is defined and samba_mounts is mapping
+    fail_msg: "`samba_mounts` must be defined and be a dict for this role"
+    success_msg: "OK"
+
+- name: Ensure samba is installed
+  become: True
+  ansible.builtin.apt:
+    name:
+      - samba
+      - samba-common-bin
+
+- name: Ensure smb.conf
+  become: True
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/samba/{{ item }}"
+    validate: testparm %s
+  with_items:
+    - smb.conf
+  register: smb_conf_changed
+
+- name: Restart samba service on config change
+  become: True
+  ansible.builtin.systemd:
+    service: smbd
+    state: restarted
+  when: smb_conf_changed.changed
+
+

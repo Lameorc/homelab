@@ -1,0 +1,9 @@
+---
+- name: Install common "admin" packages
+  ansible.builtin.apt:
+    name:
+      - tmux
+      - vim
+      - curl
+
+
