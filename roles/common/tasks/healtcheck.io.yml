@@ -1,0 +1,12 @@
+---
+- name: Ensure curl is installed
+  ansible.builtin.apt:
+    name: curl
+- name: Ensure cron service is running 
+- name: Setup healtcheck.io check cronjob
+  ansible.builtin.cron:
+    name: "healthcheck.io machine healthcheck"
+    minute: "{{ cron_machine_minute_offset|default(0) }}"
+    job: "curl -m 10 --retry 5 {{ healthcheck_io_url }}"
+
+
