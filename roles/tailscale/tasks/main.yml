@@ -16,15 +16,15 @@
   - name: "ensure package"
     ansible.builtin.apt:
       name: tailscale
+    register: tailscale_installed
   - name: "enable service so it runs on next restart"
     ansible.builtin.systemd:
       name: "tailscaled"
       enabled: True
-    register: tailscale_newly_enabled
   - name: "register the machine if we've newly enabled the service"
     ansible.builtin.shell:
       cmd: "tailscale up --authkey {{ tailscale_auth_key }}"
-    when: tailscale_newly_enabled.changed
+    when: tailscale_installed.changed
   - name: "get ipv4"
     ansible.builtin.shell:
       cmd: "tailscale ip -4"
