@@ -2,7 +2,10 @@
 - name: Ensure curl is installed
   ansible.builtin.apt:
     name: curl
-- name: Ensure cron service is running 
+- name: Ensure cron service is running
+  ansible.builtin.systemd:
+    service: cron
+    state: started
 - name: Setup healtcheck.io check cronjob
   ansible.builtin.cron:
     name: "healthcheck.io machine healthcheck"
