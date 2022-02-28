@@ -3,6 +3,8 @@
   include_tasks: ./motd.yml
 - name: Setup packages
   include_tasks: packages.yml
+- name: Setup sshd
+  include_tasks: sshd.yml
 - name: Setup healthchecks
   include_tasks: healtcheck.io.yml
   when: healthcheck_io_url is defined and healthcheck_io_url != ""

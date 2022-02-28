@@ -1,0 +1,15 @@
+---
+- name: ensure sshd config
+  become: True
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /etc/ssh/{{ item }}
+  with_items:
+    - sshd_config
+  register: sshd_config
+- name: restard sshd service if config changed
+  become: True
+  ansible.builtin.systemd:
+    service: sshd
+    state: restarted
+  when: sshd_config.changed
