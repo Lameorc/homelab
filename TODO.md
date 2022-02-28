@@ -6,6 +6,5 @@
   - Only allow ssh key auth
   - Disable root login
 - Roles for
-  - smb storage/NAS
   - Seedbox/torrent client
   - Gitea
