@@ -3,4 +3,6 @@
   become: true
   ansible.builtin.template:
     src: ./templates/motd.j2
+    # TODO: Ubuntu actually seems to use update-motd nowadays, unlike raspbian.
+    #   So either switching to that or at least clean it up so there's not two motd sources.
     dest: /etc/motd

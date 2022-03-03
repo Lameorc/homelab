@@ -1,0 +1,34 @@
+
+---
+- name: Ensure nas mount list is defind
+  ansible.builtin.assert:
+    that:
+      - nas_accessor_mounts is defined and nas_accessor_mounts is mapping
+    fail_msg: "`nas_accessor_mounts` must be defined and be a dict for this role"
+    success_msg: "OK"
+
+- name: Ensure cifs utils are installed for mounting
+  become: True
+  ansible.builtin.apt:
+    name: cifs-utils
+
+- name: Ensure the destination dirs for mounts are defined
+  become: True
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ nas_accessor_mounts.values() }}"
+
+- name: Mount samba devices
+  become: True
+  ansible.posix.mount:
+    fstype: cifs
+    src: "{{ item.key }}"
+    path: "{{ item.value }}"
+    # anonymous access is enabled, so this is "fine" for now
+    opts: "user=nas_accessor,password=''"
+    state: mounted
+  with_dict: "{{ nas_accessor_mounts }}"
+
+
+

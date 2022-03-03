@@ -36,6 +36,10 @@ all:
                 30393338333035373732636436333764663361653263373835356537653536363965326436636166
                 37656462373365343033633833656535643239356562653630653666326432363761656534373738
                 326635623739343331393064636235383830
+              nas_accessor_mounts:
+                "//100.90.178.12/elements_storage": "/mnt/nas_elements_storage"
+                "//100.90.178.12/elements_media": "/mnt/nas_elements_media"
+                "//100.90.178.12/rpistorage": "/mnt/rpistorage"
 
         # possibly non-sensical to manage workstations through this as well
         workstations:

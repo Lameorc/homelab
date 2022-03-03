@@ -1,0 +1,4 @@
+---
+- hosts: raspberry-1
+  roles:
+    - nas_accessor
