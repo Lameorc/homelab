@@ -2,6 +2,51 @@
 all:
   vars:
     nas_accessor_group_name: "nas_accessor"
+    prometheus_grafana_remote_write_username: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      62626662656533346466613436363062636339313965653039633164333339336331623466323565
+      3237356433646637663234363162633536653830373863360a313861386534643438623330633838
+      33646137343763363638613639313137393239393164386561323861393765313638663538386164
+      3563323033383338330a666265393362336238353934316333353534373237626136326436633631
+      6461
+    prometheus_grafana_remote_write_password: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      62616332363764666262663063306362633033336165356162353334643837646334396332353061
+      3134313334333236373630336361363033313934616166310a306262646263353163633962333164
+      39626437303833616166336361346362373461363634306161313134646637363936643639623663
+      3863636263666636630a626330623736633638343736623166323232613433333837323839623135
+      35653561363133396263333030373033323762386237383530356332363134333735656532656534
+      37386135346132306562653839363533626633303665356565616135346333323337373135376165
+      38616261333338643137383166383132396661613662383361333261306133633434353965646437
+      63376163646438623162353635663131626137616134313162653562643138373838363038326336
+      61356533646631626562363966633637326664643665313231393830326137326262
+    prometheus_scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets:
+            - 0.0.0.0:9090
+      - job_name: node_exporter
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+            - raspberry-tv:9100
+            - raspberry-1:9100
+            - optiplex-1:9100
+    prometheus_remote_write:
+      - url: "https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push"
+        basic_auth:
+          username: "{{ prometheus_grafana_remote_write_username }}"
+          password: "{{ prometheus_grafana_remote_write_password }}"
+    prometheus_alertmanager_config:
+      - scheme: "https"
+        path_prefix: "/alertmanager"
+        static_configs:
+          - targets:
+            - "alertmanager-eu-west-0.grafana.net"
+        basic_auth:
+          username: "179563"
+          password: "{{ prometheus_grafana_remote_write_password }}"
+
   children:
     tailscale:
       children:
@@ -44,8 +89,8 @@ all:
                 "//100.90.178.12/rpistorage": "/mnt/rpistorage"
 
             optiplex-1:
-              ansible_host: 192.168.0.
-              ansuble_user: ubuntu
+              ansible_host: 100.80.124.30
+              ansible_user: ubuntu
               sshd_add_include_for_d: True
               nas_accessor_mounts:
                 "//100.90.178.12/elements_storage": "/mnt/nas_elements_storage"

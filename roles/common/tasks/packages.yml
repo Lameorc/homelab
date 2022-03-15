@@ -8,5 +8,7 @@
       - curl
       - htop
       - rsync
-
+      - net-tools
+      - iftop
+      - prometheus-node-exporter
 

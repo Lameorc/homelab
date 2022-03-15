@@ -1,0 +1,6 @@
+---
+- hosts: optiplex-1
+  roles:
+    - cloudalchemy.prometheus
+
+
