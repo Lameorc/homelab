@@ -43,14 +43,11 @@ all:
                 "//100.90.178.12/elements_media": "/mnt/nas_elements_media"
                 "//100.90.178.12/rpistorage": "/mnt/rpistorage"
 
-        # possibly non-sensical to manage workstations through this as well
-        workstations:
-          children:
-            linux_workstations:
-              hosts:
-                sbb:
-                  ansible_host: 100.127.145.62
-                  ansible_user: newmark
-
-    brno_drevarska_lan:
-      children:
+            optiplex-1:
+              ansible_host: 192.168.0.
+              ansuble_user: ubuntu
+              sshd_add_include_for_d: True
+              nas_accessor_mounts:
+                "//100.90.178.12/elements_storage": "/mnt/nas_elements_storage"
+                "//100.90.178.12/elements_media": "/mnt/nas_elements_media"
+                "//100.90.178.12/rpistorage": "/mnt/rpistorage"
