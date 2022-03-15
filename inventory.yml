@@ -1,5 +1,7 @@
 ---
 all:
+  vars:
+    nas_accessor_group_name: "nas_accessor"
   children:
     tailscale:
       children:

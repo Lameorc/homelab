@@ -12,6 +12,19 @@
   ansible.builtin.apt:
     name: cifs-utils
 
+- name: Ensure group exists
+  become: True
+  ansible.builtin.group:
+    name: "{{ nas_accessor_group_name }}"
+    state: present
+
+- name: Ensure ansible user is in the group
+  become: True
+  ansible.builtin.user:
+    append: True
+    name: "{{ ansible_user }}"
+    groups: "{{ nas_accessor_group_name }}"
+
 - name: Ensure the destination dirs for mounts are defined
   become: True
   ansible.builtin.file:
@@ -26,7 +39,7 @@
     src: "{{ item.key }}"
     path: "{{ item.value }}"
     # anonymous access is enabled, so this is "fine" for now
-    opts: "user=nas_accessor,password=''"
+    opts: "user=nas_accessor,password='',file_mode=0664,dir_mode=0775,gid={{ nas_accessor_group_name }}"
     state: mounted
   with_dict: "{{ nas_accessor_mounts }}"
 
