@@ -1,4 +1,4 @@
 ---
-- hosts: raspberry-1
+- hosts: raspberry-1,optiplex-1
   roles:
     - nas_accessor
