@@ -20,6 +20,10 @@ all:
       38616261333338643137383166383132396661613662383361333261306133633434353965646437
       63376163646438623162353635663131626137616134313162653562643138373838363038326336
       61356533646631626562363966633637326664643665313231393830326137326262
+    prometheus_global:
+      scrape_timeout: 30s
+      scrape_interval: 60s
+      evaluation_interval: 30s
     prometheus_scrape_configs:
       - job_name: prometheus
         static_configs:
@@ -29,9 +33,10 @@ all:
         metrics_path: /metrics
         static_configs:
           - targets:
-            - raspberry-tv:9100
-            - raspberry-1:9100
-            - optiplex-1:9100
+            # use local ip addresses, tailscale ones seem to overload the network
+            - 192.168.0.145:9100
+            - 192.168.0.117:9100
+            - 127.0.0.1:9100
     prometheus_remote_write:
       - url: "https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push"
         basic_auth:
@@ -46,6 +51,26 @@ all:
         basic_auth:
           username: "179563"
           password: "{{ prometheus_grafana_remote_write_password }}"
+    node_exporter_enabled_collectors: []
+    node_exporter_disabled_collectors:
+     - arp
+     - bcache
+     - bonding
+     - btrfs
+     - dmi
+     - nfs
+     - nfsd
+     - xfs
+     - zfs
+     - systemd
+     - supervisord
+     - processes
+     - mountstats
+     - stat
+     - tapestat
+     - pressure
+     - nvme
+     - sockstat
 
   children:
     tailscale:
@@ -84,15 +109,15 @@ all:
                 37656462373365343033633833656535643239356562653630653666326432363761656534373738
                 326635623739343331393064636235383830
               nas_accessor_mounts:
-                "//100.90.178.12/elements_storage": "/mnt/nas_elements_storage"
-                "//100.90.178.12/elements_media": "/mnt/nas_elements_media"
-                "//100.90.178.12/rpistorage": "/mnt/rpistorage"
+                "//192.168.0.145/elements_storage": "/mnt/nas_elements_storage"
+                "//192.168.0.145/elements_media": "/mnt/nas_elements_media"
+                "//192.168.0.145/rpistorage": "/mnt/rpistorage"
 
             optiplex-1:
               ansible_host: 100.80.124.30
               ansible_user: ubuntu
               sshd_add_include_for_d: True
               nas_accessor_mounts:
-                "//100.90.178.12/elements_storage": "/mnt/nas_elements_storage"
-                "//100.90.178.12/elements_media": "/mnt/nas_elements_media"
-                "//100.90.178.12/rpistorage": "/mnt/rpistorage"
+                "//192.168.0.145/elements_storage": "/mnt/nas_elements_storage"
+                "//192.168.0.145/elements_media": "/mnt/nas_elements_media"
+                "//192.168.0.145/rpistorage": "/mnt/rpistorage"
