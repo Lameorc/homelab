@@ -1,0 +1,8 @@
+---
+- hosts: optiplex-1,raspberry-1
+  become: True
+  tasks:
+    - name: reboot
+      ansible.builtin.reboot:
+- name: ensure nas
+  import_playbook: ./nas_accessor.yml

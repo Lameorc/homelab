@@ -41,6 +41,7 @@
     # anonymous access is enabled, so this is "fine" for now
     opts: "user=nas_accessor,password='',file_mode=0664,dir_mode=0775,gid={{ nas_accessor_group_name }}"
     state: mounted
+    boot: True
   with_dict: "{{ nas_accessor_mounts }}"
 
 
