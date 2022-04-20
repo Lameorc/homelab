@@ -1,0 +1,202 @@
+---
+- name: ensure radarr user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "{{ radarr.user.name }}"
+    downloader_group: "{{ radarr.group.name }}"
+- name: register radarr_user info
+  ansible.builtin.user:
+    name: "{{ radarr.user.name }}"
+  register: radarr_user
+
+- name: ensure sonarr user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "{{ sonarr.user.name }}"
+    downloader_group: "{{ sonarr.group.name }}"
+- name: register sonarr_user info
+  ansible.builtin.user:
+    name: "{{ sonarr.user.name }}"
+  register: sonarr_user
+
+- name: ensure jackett user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "jackett"
+    downloader_group: "jackett"
+- name: register jackett_user info
+  ansible.builtin.user:
+    name: "jackett"
+  register: jackett_user
+
+- name: ensure deluge user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "deluge"
+    downloader_group: "deluge"
+- name: register deluge_user info
+  ansible.builtin.user:
+    name: "deluge"
+  register: deluge_user
+
+- name: ensure transmission user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "transmission"
+    downloader_group: "transmission"
+- name: register transmission_user info
+  ansible.builtin.user:
+    name: "transmission"
+  register: transmission_user
+
+- name: ensure organizr user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "organizr"
+    downloader_group: "organizr"
+- name: register organizr_user info
+  ansible.builtin.user:
+    name: "organizr"
+  register: organizr_user
+
+- name: ensure bazarr user
+  include_tasks: user.yml
+  vars:
+    downloader_user: "bazarr"
+    downloader_group: "bazarr"
+- name: register bazarr_user info
+  ansible.builtin.user:
+    name: "bazarr"
+  register: bazarr_user
+
+
+
+- name: get the gid of nas accessor group
+  become: true
+  ansible.builtin.group:
+    name: "{{ nas_accessor_group_name }}"
+  register: nas_accessor_group
+
+- name: Create downloader docker netowrk
+  become: True
+  docker_network:
+    name: downloader
+
+- name: Start jackett container
+  become: True
+  docker_container:
+    name: jackett
+    image: "{{ jackett.docker_image }}"
+    hostname: jackett
+    networks:
+      - name: downloader
+    env:
+      PUID: "{{ jackett_user.uid }}"
+      PGID: "{{ nas_accessor_group.gid }}"
+      UMASK: "002"
+      TZ: "Europe/Prague"
+    ports:
+      - 9117:9117
+    volumes:
+      - "/home/jackett:/config"
+
+
+- name: start radarr container
+  become: True
+  docker_container:
+    name: radarr
+    image: "{{ radarr.docker_image }}"
+    pull: True
+    hostname: raddar
+    networks:
+      - name: downloader
+    published_ports:
+      - "7878:7878"
+    env:
+      BACKUP: "no"
+      PUID: "{{ radarr_user.uid }}"
+      PGID: "{{ nas_accessor_group.gid }}"
+      UMASK: "002"
+      TZ: "Europe/Prague"
+      TP_ADDON: radarr-darker
+    volumes:
+      - "{{ downloader_data_path }}:/data"
+      - "/home/{{ radarr.user.name }}:/config"
+
+- name: start sonarr container
+  become: True
+  docker_container:
+    name: sonarr
+    hostname: sonarr
+    image: "{{ sonarr.docker_image }}"
+    networks:
+      - name: downloader
+    ports:
+      - "8989:8989"
+    env:
+      PUID: "{{ sonarr_user.uid }}"
+      PGID: "{{ nas_accessor_group.gid }}"
+      UMASK: "002"
+      TZ: "Europe/Prague"
+      TP_ADDON: sonarr-darker
+    volumes:
+      - "{{ downloader_data_path }}:/data"
+      - "/home/{{ sonarr.user.name }}:/config"
+
+- name: start transmission container
+  become: True
+  docker_container:
+    name: transmission
+    hostname: transmission
+    image: lscr.io/linuxserver/transmission
+    networks:
+      - name: downloader
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    env:
+      TZ: "Europe/Prague"
+      PUID: "{{ transmission_user.uid }}"
+      PGID: "{{ nas_accessor_group.gid }}"
+    volumes:
+      - "{{ downloader_data_path }}:/data"
+      - "/home/transmission:/config"
+
+
+- name: start organizr container
+  become: True
+  docker_container:
+    name: organizr
+    hostname: organizr
+    image: organizr/organizr
+    networks:
+      - name: downloader
+    ports:
+      - 80:80
+    env:
+      TZ: "Europe/Prague"
+      PUID: "{{ organizr_user.uid }}"
+      PGID: "{{ nas_accessor_group.gid }}"
+    volumes:
+      - "{{ downloader_data_path }}:/data"
+      - "/home/organizr:/config"
+
+- name: start bazarr container
+  become: True
+  docker_container:
+    name: bazarr
+    hostname: bazarr
+    image: lscr.io/linuxserver/bazarr
+    networks:
+      - name: downloader
+    ports:
+      - "6767:6767"
+    env:
+      TZ: "Europe/Prague"
+      PUID: "{{ bazarr_user.uid }}"
+      PGID: "{{ nas_accessor_group.gid }}"
+      TP_ADDON: bazarr-darker
+    volumes:
+      - "{{ downloader_data_path }}:/data"
+      - "/home/bazarr:/config"

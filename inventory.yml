@@ -71,7 +71,27 @@ all:
      - pressure
      - nvme
      - sockstat
+    docker:
+      user:
+        name: 'docker'
+      group:
+        name: 'docker'
+    radarr:
+      user:
+        name: 'radarr'
+      group:
+        name: 'radarr'
+      docker_image: 'lscr.io/linuxserver/radarr'
+    sonarr:
+      user:
+        name: 'sonarr'
+      group:
+        name: 'sonarr'
+      docker_image: 'lscr.io/linuxserver/sonarr'
+    jackett:
+      docker_image: 'lscr.io/linuxserver/jackett'
 
+    downloader_data_path: "/mnt/nas_elements_media"
   children:
     tailscale:
       children:

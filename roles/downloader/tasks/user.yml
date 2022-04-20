@@ -1,0 +1,21 @@
+---
+- name: create group
+  become: True
+  ansible.builtin.group:
+    name: "{{ downloader_group }}"
+    state: present
+
+- name: create user
+  become: true
+  ansible.builtin.user:
+    name: "{{ downloader_user }}"
+    state: present
+    group: "{{ downloader_group }}"
+    create_home: True
+
+- name: ensure user has access to nas folders
+  become: true
+  ansible.builtin.user:
+    name: "{{ downloader_user }}"
+    groups: "{{ nas_accessor_group_name }}"
+    append: True

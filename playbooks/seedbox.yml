@@ -1,0 +1,4 @@
+- hosts: optiplex-1
+  roles:
+    - docker
+    - downloader

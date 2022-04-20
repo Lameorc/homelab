@@ -1,0 +1,70 @@
+---
+- name: Install aptitude using apt
+  become: True
+  apt:
+    name: aptitude
+    state: latest
+    force_apt_get: yes
+
+- name: Install required system packages
+  become: True
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - 'apt-transport-https'
+    - 'ca-certificates'
+    - 'curl'
+    - 'software-properties-common'
+    - 'python3-pip'
+    - 'virtualenv'
+    - 'python3-setuptools'
+
+- name: Add Docker GPG apt Key
+  become: True
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  become: True
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  become: True
+  apt:
+    update_cache: yes
+    name: docker-ce
+    state: latest
+
+- name: Install Docker Module for Python
+  become: True
+  pip:
+    name: docker
+
+- name: create docker group
+  become: True
+  ansible.builtin.group:
+    name: "{{ docker.group.name }}"
+    state: present
+
+- name: create docker user
+  become: True
+  ansible.builtin.user:
+    name: "{{ docker.user.name }}"
+    append: True
+    groups: "{{ docker.group.name }}"
+
+- name: Start docker service
+  become: True
+  ansible.builtin.systemd:
+    service: "{{ item }}"
+    state: started
+    enabled: True
+  with_items:
+    - docker
+    - containerd
+
+
