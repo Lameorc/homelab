@@ -88,6 +88,7 @@
     name: jackett
     image: "{{ jackett.docker_image }}"
     hostname: jackett
+    restart_policy: unless-stopped
     networks:
       - name: downloader
     env:
@@ -108,6 +109,7 @@
     image: "{{ radarr.docker_image }}"
     pull: True
     hostname: raddar
+    restart_policy: unless-stopped
     networks:
       - name: downloader
     published_ports:
@@ -128,7 +130,9 @@
   docker_container:
     name: sonarr
     hostname: sonarr
+    restart_policy: unless-stopped
     image: "{{ sonarr.docker_image }}"
+    pull: True
     networks:
       - name: downloader
     ports:
@@ -148,6 +152,7 @@
   docker_container:
     name: transmission
     hostname: transmission
+    restart_policy: unless-stopped
     image: lscr.io/linuxserver/transmission
     networks:
       - name: downloader
@@ -169,6 +174,7 @@
   docker_container:
     name: organizr
     hostname: organizr
+    restart_policy: unless-stopped
     image: organizr/organizr
     networks:
       - name: downloader
@@ -187,6 +193,7 @@
   docker_container:
     name: bazarr
     hostname: bazarr
+    restart_policy: unless-stopped
     image: lscr.io/linuxserver/bazarr
     networks:
       - name: downloader
